@@ -6,7 +6,7 @@ dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'
 
 def call_stream_with_messages():
     messages = [
-        {'role': 'user', 'content': 'Introduce the capital of China'}]
+        {'role': 'user', 'content': 'Tell Me About PT. Dwi Tunggal Putra'}]
     responses = dashscope.Generation.call(
         'qwen1.5-7b-chat',
         messages=messages,
