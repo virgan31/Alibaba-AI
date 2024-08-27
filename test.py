@@ -5,9 +5,12 @@ import json
 dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'
 
 def call_with_stream():
+    # Get the message content from manual input
+    user_input = input("Enter your message: ")
+    
     messages = [
-        {'role': 'user', 'content': 'Introduce the capital of China'}]
-    output_data = []
+        {'role': 'user', 'content': user_input}]
+    merged_content = ""
     
     responses = dashscope.Generation.call("qwen-max",
                                 messages=messages,
@@ -19,23 +22,23 @@ def call_with_stream():
         if response.status_code == HTTPStatus.OK:
             content = response.output.choices[0]['message']['content']
             print(content, end='')  # Still prints to console
-            output_data.append({'content': content})  # Append to JSON-compatible list
+            merged_content += content
         else:
-            error_info = {
-                'request_id': response.request_id,
-                'status_code': response.status_code,
-                'error_code': response.code,
-                'error_message': response.message
-            }
-            output_data.append({'error': error_info})
             print('Request id: %s, Status code: %s, error code: %s, error message: %s' % (
                 response.request_id, response.status_code,
                 response.code, response.message
             ))
             
-    # Convert the output data to JSON format and print it
+    # Prepare the final output in JSON format
+    output_data = {'content': merged_content}
     json_output = json.dumps(output_data, indent=4)
-    print("\nJSON Output:\n", json_output)
+    
+    # Write the JSON output to a file named 'respond.json'
+    with open('respond.json', 'w') as json_file:
+        json_file.write(json_output)
+    
+    # Optional: Print confirmation or the path to the saved file
+    print("\nJSON Output saved to 'respond.json'")
             
 if __name__ == '__main__':
     call_with_stream()
