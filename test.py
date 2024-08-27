@@ -24,4 +24,3 @@ def call_with_stream():
 
 if __name__ == '__main__':
     call_with_stream()
-    call_stream_with_messages()
